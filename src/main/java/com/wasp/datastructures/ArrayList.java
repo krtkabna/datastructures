@@ -87,7 +87,7 @@ public class ArrayList implements List {
 
     @Override
     public boolean isEmpty() {
-        return size() != 0;
+        return size() == 0;
     }
 
     @Override
@@ -114,7 +114,6 @@ public class ArrayList implements List {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        System.out.println("size() = " + size());
         for (int i = 0; i < size(); i++) {
             sb.append(arr[i].toString());
 
