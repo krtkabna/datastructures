@@ -13,10 +13,15 @@ public class LinkedList implements List {
 
     @Override
     public void add(Object value) {
+        Node tail = new Node(value);
         if (head == null) {
             head = new Node(value);
         } else {
-
+            Node curr = head;
+            while (curr.getNext() != null) {
+                curr = curr.getNext();
+            }
+            curr.setNext(tail);
         }
         size++;
     }
@@ -24,31 +29,48 @@ public class LinkedList implements List {
     @Override
     public void add(Object value, int index) {
         checkIndexOOB(index);
-        int count = 0;
-        Node temp = head, prev = null;
-        while (temp != null && count < index) {
-            prev = temp;
-            temp = temp.next;
-            count++;
+        Node toAdd = new Node(value);
+        Node temp = head;
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp.getNext();
         }
+        toAdd.setNext(temp.getNext());
+        temp.setNext(toAdd);
 
         size++;
     }
 
     @Override
     public Object remove(int index) {
+        Node temp = head;
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp.getNext();
+        }
+        temp.setNext(temp.getNext().getNext());
+
         size--;
         return null;
     }
 
     @Override
     public Object get(int index) {
+        Node temp = head;
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp.getNext();
+        }
         return null;
     }
 
     @Override
     public Object set(Object value, int index) {
-        return null;
+        checkIndexOOB(index);
+        Node toSet = new Node(value);
+        Node temp = head;
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp.getNext();
+        }
+        toSet.setNext(temp.getNext());
+        return temp;
     }
 
     @Override
@@ -90,9 +112,26 @@ public class LinkedList implements List {
     class Node {
         Object data;
         Node next;
+
         Node(Object o) {
             this.data = o;
             next = null;
+        }
+
+        public Object getData() {
+            return data;
+        }
+
+        public void setData(Object data) {
+            this.data = data;
+        }
+
+        public Node getNext() {
+            return next;
+        }
+
+        public void setNext(Node next) {
+            this.next = next;
         }
     }
 }
