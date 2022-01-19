@@ -5,8 +5,6 @@ import java.util.Arrays;
 
 public class ArrayList implements List {
     private static final int DEFAULT_CAPACITY = 16;
-    private int capacity;
-    //decide whether they are static
     private int index;
     private Object[] arr;
 
@@ -16,7 +14,6 @@ public class ArrayList implements List {
 
     public ArrayList(int capacity) {
         arr = new Object[capacity];
-        this.capacity = capacity;
         this.index = 0;
     }
 
@@ -137,16 +134,16 @@ public class ArrayList implements List {
     }
 
     private void sizeUp() {
-        if (size() + 1 >= capacity) {
-            capacity *= 2;
+        if (size() + 1 >= arr.length) {
+            int capacity = arr.length / 2;
             Object[] temp = Arrays.copyOf(arr, capacity);
             arr = temp;
         }
     }
 
     private void sizeDown() {
-        if (size() - 1 <= capacity / 2) {
-            capacity /= 2;
+        if (size() - 1 <= arr.length / 2) {
+            int capacity = arr.length / 2;
             Object[] temp = Arrays.copyOf(arr, capacity);
             arr = temp;
         }
