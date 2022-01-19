@@ -11,6 +11,7 @@
 # Generated files #
 /web-app/WEB-INF
 build/
+target/
 *.[oa]
 *.pyc
 

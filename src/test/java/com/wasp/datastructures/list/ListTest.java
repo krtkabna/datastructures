@@ -1,6 +1,4 @@
-import com.wasp.datastructures.ArrayList;
-import com.wasp.datastructures.util.List;
-import org.junit.Before;
+package com.wasp.datastructures.list;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,19 +6,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-public class ArrayListTest {
-    private List list;
-
-    @Before
-    public void init() {
-        int[] test = {10, 20, 30, 40, 40, 50};
-        list = new ArrayList();
-        {
-            for (int i = 0; i < test.length; i++) {
-                list.add(test[i]);
-            }
-        }
-    }
+public abstract class ListTest {
+    List list;
 
     @Test
     public void testNegativeCapacity() {
@@ -35,6 +22,7 @@ public class ArrayListTest {
 
     @Test
     public void testAddToLastIndex() {
+
         list.add(1);
         assertEquals(1, list.get(6));
         assertEquals(7, list.size());

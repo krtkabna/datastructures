@@ -1,40 +1,42 @@
-package com.wasp.datastructures;
+package com.wasp.datastructures.list;
 
-import com.wasp.datastructures.util.List;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class ArrayList implements List {
     private static final int DEFAULT_CAPACITY = 16;
     private static final double GROW_FACTOR = 1.5;
-    private int index;
-    private Object[] arr;
+    private int size;
+    private Object[] array;
 
     public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
 
     public ArrayList(int capacity) {
-        arr = new Object[capacity];
-        this.index = 0;
+        array = new Object[capacity];
+        this.size = 0;
     }
 
     @Override
     public void add(Object value) {
-        add(value, index);
+        add(value, size);
     }
 
     @Override
     public void add(Object value, int index) {
-        this.index++;
+        //это в конец
+        this.size++;
         checkIndexOOB(index);
         sizeUp();
 
+        //System.arraycopy();
         Object bef = get(index);
         Object aft;
-        arr[index] = value;
+        array[index] = value;
         for (int i = index + 1; i < size(); i++) {
-            aft = arr[i];
-            arr[i] = bef;
+            aft = array[i];
+            array[i] = bef;
             bef = aft;
         }
     }
@@ -42,13 +44,12 @@ public class ArrayList implements List {
     @Override
     public Object remove(int index) {
         checkIndexOOB(index);
-        sizeDown();
         Object before = get(index);
 
         for (int i = index; i < size(); i++) {
-            arr[i] = arr[i + 1];
+            array[i] = array[i + 1];
         }
-        this.index--;
+        this.size--;
 
         return before;
     }
@@ -56,27 +57,27 @@ public class ArrayList implements List {
     @Override
     public Object get(int index) {
         checkIndexOOB(index);
-        return arr[index];
+        return array[index];
     }
 
     @Override
     public Object set(Object value, int index) {
         checkIndexOOB(index);
-        Object before = arr[index];
-        arr[index] = value;
+        Object before = array[index];
+        array[index] = value;
 
         return before;
     }
 
     @Override
     public void clear() {
-        arr = new Object[arr.length];
-        index = 0;
+        array = new Object[array.length];
+        size = 0;
     }
 
     @Override
     public int size() {
-        return index;
+        return size;
     }
 
     @Override
@@ -92,7 +93,10 @@ public class ArrayList implements List {
     @Override
     public int indexOf(Object value) {
         for (int i = 0; i < size(); i++) {
-            if (arr[i] == value) return i;
+            //equals
+            if (Objects.equals(array[i], value)) {
+                return i;
+            }
         }
         return -1;
     }
@@ -100,7 +104,7 @@ public class ArrayList implements List {
     @Override
     public int lastIndexOf(Object value) {
         for (int i = size() - 1; i >= 0; i--) {
-            if (arr[i] == value) return i;
+            if (array[i] == value) return i;
         }
         return -1;
     }
@@ -109,7 +113,7 @@ public class ArrayList implements List {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (int i = 0; i < size(); i++) {
-            sb.append(arr[i].toString());
+            sb.append(array[i].toString());
 
             if (size() - i == 1) {
                 sb.append("]");
@@ -122,23 +126,17 @@ public class ArrayList implements List {
 
     private void checkIndexOOB(int index) {
         if (index < 0 || (index >= size())) {
+            //более понятное сообщение
             throw new IndexOutOfBoundsException(index);
         }
     }
 
     private void sizeUp() {
-        if (size() + 1 >= arr.length) {
-            int capacity = (int) (arr.length * GROW_FACTOR);
-            Object[] temp = Arrays.copyOf(arr, capacity);
-            arr = temp;
+        if (size() + 1 >= array.length) {
+            int capacity = (int) (array.length * GROW_FACTOR);
+            Object[] temp = Arrays.copyOf(array, capacity);
+            array = temp;
         }
     }
 
-    private void sizeDown() {
-        if (size() - 1 <= arr.length / GROW_FACTOR) {
-            int capacity = (int) (arr.length / GROW_FACTOR);
-            Object[] temp = Arrays.copyOf(arr, capacity);
-            arr = temp;
-        }
-    }
 }

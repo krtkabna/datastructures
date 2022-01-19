@@ -1,4 +1,4 @@
-package com.wasp.datastructures.util;
+package com.wasp.datastructures.list;
 
 // Abstract Data Type
 public interface List {
