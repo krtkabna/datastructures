@@ -15,14 +15,22 @@ public abstract class ListTest {
     }
 
     @Test
-    public void testIndexOOB() {
-        assertThrows(IndexOutOfBoundsException.class, () -> list.add(42, -1));
-        assertThrows(IndexOutOfBoundsException.class, () -> list.remove(8));
+    public void testAddIndexOOB() {
+        assertThrows(IndexOutOfBoundsException.class,
+            () -> list.add(42, -1));
+
+    }
+
+    @Test
+    public void testRemoveIndexOOB() {
+        assertEquals(6, list.size());
+        assertThrows(IndexOutOfBoundsException.class,
+            () -> list.remove(8));
     }
 
     @Test
     public void testAddToLastIndex() {
-
+        assertEquals(6, list.size());
         list.add(1);
         assertEquals(1, list.get(6));
         assertEquals(7, list.size());
@@ -30,8 +38,10 @@ public abstract class ListTest {
 
     @Test
     public void testAddByIndex() {
+        assertEquals(6, list.size());
         list.add(2, 1);
         assertEquals(2, list.get(1));
+        assertEquals(7, list.size());
         //assert that the other elements have moved
         assertEquals(30, list.get(3));
         assertEquals(40, list.get(4));
@@ -39,14 +49,18 @@ public abstract class ListTest {
 
     @Test
     public void testRemove() {
+        assertEquals(6, list.size());
         assertEquals(10, list.remove(0));
         assertEquals(20, list.get(0));
+        assertEquals(5, list.size());
     }
 
     @Test
     public void testGet() {
-        assertEquals(10, list.get(0));
-        assertEquals(20, list.get(1));
+        list.set(1, 0);
+        list.set(2, 1);
+        assertEquals(1, list.get(0));
+        assertEquals(2, list.get(1));
     }
 
     @Test
@@ -57,6 +71,7 @@ public abstract class ListTest {
 
     @Test
     public void testClear() {
+        assertEquals(6, list.size());
         list.clear();
         assertEquals(0, list.size());
         assertTrue(list.isEmpty());
@@ -64,12 +79,14 @@ public abstract class ListTest {
 
     @Test
     public void testSize() {
+        assertEquals(6, list.size());
         list.remove(4);
         assertEquals(5, list.size());
     }
 
     @Test
     public void testIsEmpty() {
+        assertEquals(6, list.size());
         assertFalse(list.isEmpty());
         list.clear();
         assertTrue(list.isEmpty());
@@ -77,20 +94,29 @@ public abstract class ListTest {
 
     @Test
     public void testContains() {
-        assertTrue(list.contains(10));
-        assertTrue(list.contains(50));
+        list.add(9);
+        assertTrue(list.contains(9));
         assertFalse(list.contains(42));
     }
 
     @Test
     public void testIndexOf() {
+        list.clear();
+        list.add(10);
+        list.add(20);
+        list.add(40);
         assertEquals(0, list.indexOf(10));
-        assertEquals(3, list.indexOf(40));
+        assertEquals(2, list.indexOf(40));
     }
 
     @Test
     public void testLastIndexOf() {
-        assertEquals(4, list.lastIndexOf(40));
+        list.clear();
+        list.add(10);
+        list.add(20);
+        list.add(20);
+        list.add(30);
+        assertEquals(2, list.lastIndexOf(20));
     }
 
     @Test

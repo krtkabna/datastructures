@@ -6,6 +6,7 @@ import java.util.Objects;
 public class ArrayList implements List {
     private static final int DEFAULT_CAPACITY = 16;
     private static final double GROW_FACTOR = 1.5;
+    private static final String INDEX_OOB_MSG = "Index out of bounds: ";
     private int size;
     private Object[] array;
 
@@ -25,20 +26,15 @@ public class ArrayList implements List {
 
     @Override
     public void add(Object value, int index) {
-        //это в конец
-        this.size++;
-        checkIndexOOB(index);
-        sizeUp();
-
-        //System.arraycopy();
-        Object bef = get(index);
-        Object aft;
-        array[index] = value;
-        for (int i = index + 1; i < size(); i++) {
-            aft = array[i];
-            array[i] = bef;
-            bef = aft;
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException(INDEX_OOB_MSG + index);
         }
+        ensureCapasity();
+
+        System.arraycopy(array, index, array, index + 1, size - index + 1);
+        array[index] = value;
+
+        size++;
     }
 
     @Override
@@ -126,12 +122,11 @@ public class ArrayList implements List {
 
     private void checkIndexOOB(int index) {
         if (index < 0 || (index >= size())) {
-            //более понятное сообщение
-            throw new IndexOutOfBoundsException(index);
+            throw new IndexOutOfBoundsException(INDEX_OOB_MSG + index);
         }
     }
 
-    private void sizeUp() {
+    private void ensureCapasity() {
         if (size() + 1 >= array.length) {
             int capacity = (int) (array.length * GROW_FACTOR);
             Object[] temp = Arrays.copyOf(array, capacity);
