@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 public class ArrayList implements List {
     private static final int DEFAULT_CAPACITY = 16;
+    private static final double GROW_FACTOR = 1.5;
     private int index;
     private Object[] arr;
 
@@ -19,16 +20,14 @@ public class ArrayList implements List {
 
     @Override
     public void add(Object value) {
-        sizeUp();
-        index++;
-        set(value, index - 1);
+        add(value, index);
     }
 
     @Override
     public void add(Object value, int index) {
+        this.index++;
         checkIndexOOB(index);
         sizeUp();
-        this.index++;
 
         Object bef = get(index);
         Object aft;
@@ -36,10 +35,7 @@ public class ArrayList implements List {
         for (int i = index + 1; i < size(); i++) {
             aft = arr[i];
             arr[i] = bef;
-
-            if (i < size()) {
-                bef = aft;
-            } else bef = null;
+            bef = aft;
         }
     }
 
@@ -74,9 +70,7 @@ public class ArrayList implements List {
 
     @Override
     public void clear() {
-        for (int i = 0; i < size(); i++) {
-            arr[i] = null;
-        }
+        arr = new Object[arr.length];
         index = 0;
     }
 
@@ -134,15 +128,15 @@ public class ArrayList implements List {
 
     private void sizeUp() {
         if (size() + 1 >= arr.length) {
-            int capacity = arr.length * 2;
+            int capacity = (int) (arr.length * GROW_FACTOR);
             Object[] temp = Arrays.copyOf(arr, capacity);
             arr = temp;
         }
     }
 
     private void sizeDown() {
-        if (size() - 1 <= arr.length / 2) {
-            int capacity = arr.length / 2;
+        if (size() - 1 <= arr.length / GROW_FACTOR) {
+            int capacity = (int) (arr.length / GROW_FACTOR);
             Object[] temp = Arrays.copyOf(arr, capacity);
             arr = temp;
         }

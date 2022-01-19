@@ -34,11 +34,10 @@ public class ArrayListTest {
     }
 
     @Test
-    public void testAdd() {
+    public void testAddToLastIndex() {
         list.add(1);
         assertEquals(1, list.get(6));
-        list.add(2);
-        assertEquals(2, list.get(7));
+        assertEquals(7, list.size());
     }
 
     @Test
@@ -72,6 +71,7 @@ public class ArrayListTest {
     public void testClear() {
         list.clear();
         assertEquals(0, list.size());
+        assertTrue(list.isEmpty());
     }
 
     @Test
