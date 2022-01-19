@@ -8,6 +8,7 @@ import static org.junit.Assert.assertThrows;
 
 public class ArrayListTest {
     private List list;
+
     @Before
     public void init() {
         int[] test = {10, 20, 30, 40, 50, 50};
