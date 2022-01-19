@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
@@ -35,7 +34,6 @@ public class ArrayListTest {
     }
 
     @Test
-    //fixme name, check size
     public void testAddToLastIndex() {
         list.add(1);
         assertEquals(1, list.get(6));
