@@ -134,7 +134,7 @@ public class ArrayList implements List {
 
     private void sizeUp() {
         if (size() + 1 >= arr.length) {
-            int capacity = (int) (arr.length * 2);
+            int capacity = arr.length * 2;
             Object[] temp = Arrays.copyOf(arr, capacity);
             arr = temp;
         }
@@ -142,7 +142,7 @@ public class ArrayList implements List {
 
     private void sizeDown() {
         if (size() - 1 <= arr.length / 2) {
-            int capacity = (int) (arr.length / 2);
+            int capacity = arr.length / 2;
             Object[] temp = Arrays.copyOf(arr, capacity);
             arr = temp;
         }
