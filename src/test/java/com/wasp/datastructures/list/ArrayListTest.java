@@ -1,10 +1,10 @@
 package com.wasp.datastructures.list;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public class ArrayListTest extends ListTest {
 
-    @Before
+    @BeforeEach
     public void init() {
         list = new ArrayList();
         list.add(10);
