@@ -4,18 +4,11 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class LinkedList implements List, Iterable {
-    private static final String INDEX_OOB_MSG = "Index out of bounds: ";
+public class LinkedList extends AbstractList implements List, Iterable {
     private Node head;
     private Node tail;
-    private int size;
 
     public LinkedList() {
-    }
-
-    @Override
-    public void add(Object value) {
-        add(value, size);
     }
 
     @Override
@@ -103,21 +96,6 @@ public class LinkedList implements List, Iterable {
     }
 
     @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return size() == 0;
-    }
-
-    @Override
-    public boolean contains(Object value) {
-        return indexOf(value) != -1;
-    }
-
-    @Override
     public int indexOf(Object value) {
         Node temp = head;
         for (int i = 0; i < size(); i++) {
@@ -151,36 +129,33 @@ public class LinkedList implements List, Iterable {
         return stringJoiner.toString();
     }
 
-    private void checkIndexOOB(int index) {
-        if (index < 0 || index > size() - 1) {
-            throw new IndexOutOfBoundsException(index);
-        }
-    }
-
     @Override
     public Iterator iterator() {
         return new Iterator() {
-            Node current = head;
+            Node curr = head;
 
             @Override
             public boolean hasNext() {
-                return current != null;
+                return curr != null;
             }
 
             @Override
             public Object next() {
-                Object result = current.data;
-                current = current.next;
+                Object result = curr.data;
+                curr = curr.next;
                 return result;
             }
 
             @Override
             public void remove() {
-                if (current == head) {
+                if (curr == head) {
                     head = head.next;
+                    head.prev = null;
+                } else {
+                    curr.prev.next = curr.next;//no problem
+                    curr.next.prev = curr.prev;//problem here
                 }
-                current = current.next;
-                current.prev = current.prev.prev;
+
                 size--;
             }
         };

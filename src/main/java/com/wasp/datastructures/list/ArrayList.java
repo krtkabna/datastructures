@@ -1,14 +1,13 @@
 package com.wasp.datastructures.list;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class ArrayList implements List {
+public class ArrayList extends AbstractList implements List, Iterable {
     private static final int DEFAULT_CAPACITY = 16;
     private static final double GROW_FACTOR = 1.5;
-    private static final String INDEX_OOB_MSG = "Index out of bounds: ";
-    private int size;
     private Object[] array;
 
     public ArrayList() {
@@ -18,11 +17,6 @@ public class ArrayList implements List {
     public ArrayList(int initialCapacity) {
         array = new Object[initialCapacity];
         this.size = 0;
-    }
-
-    @Override
-    public void add(Object value) {
-        add(value, size);
     }
 
     @Override
@@ -43,8 +37,8 @@ public class ArrayList implements List {
         checkIndexOOB(index);
         Object before = get(index);
 
-        for (int i = index; i < size(); i++) {
-            array[i] = array[i + 1];
+        if (size() - index >= 0) {
+            System.arraycopy(array, index + 1, array, index, size() - index);
         }
         this.size--;
 
@@ -70,21 +64,6 @@ public class ArrayList implements List {
     public void clear() {
         array = new Object[array.length];
         size = 0;
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return size() == 0;
-    }
-
-    @Override
-    public boolean contains(Object value) {
-        return indexOf(value) != -1;
     }
 
     @Override
@@ -120,17 +99,33 @@ public class ArrayList implements List {
         return array.length;
     }
 
-    private void checkIndexOOB(int index) {
-        if (index < 0 || (index >= size())) {
-            throw new IndexOutOfBoundsException(INDEX_OOB_MSG + index);
-        }
-    }
-
     private void ensureCapasity() {
         if (size() + 1 >= array.length) {
             int capacity = (int) (array.length * GROW_FACTOR);
             Object[] temp = Arrays.copyOf(array, capacity);
             array = temp;
         }
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator() {
+            int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < size;
+            }
+
+            @Override
+            public Object next() {
+                return get(index++);
+            }
+
+            @Override
+            public void remove() {
+                ArrayList.this.remove(index - 1);
+            }
+        };
     }
 }

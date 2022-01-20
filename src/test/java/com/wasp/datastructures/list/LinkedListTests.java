@@ -1,6 +1,6 @@
 package com.wasp.datastructures.list;
 
-public class LinkedListTest extends ListTest {
+public class LinkedListTests extends ListTests {
 
     @Override
     protected List createList() {
