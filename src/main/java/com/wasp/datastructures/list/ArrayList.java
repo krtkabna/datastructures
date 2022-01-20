@@ -89,7 +89,6 @@ public class ArrayList implements List {
     @Override
     public int indexOf(Object value) {
         for (int i = 0; i < size(); i++) {
-            //equals
             if (Objects.equals(array[i], value)) {
                 return i;
             }
@@ -100,7 +99,9 @@ public class ArrayList implements List {
     @Override
     public int lastIndexOf(Object value) {
         for (int i = size() - 1; i >= 0; i--) {
-            if (array[i] == value) return i;
+            if (Objects.equals(array[i], value)) {
+                return i;
+            }
         }
         return -1;
     }
@@ -133,5 +134,4 @@ public class ArrayList implements List {
             array = temp;
         }
     }
-
 }
