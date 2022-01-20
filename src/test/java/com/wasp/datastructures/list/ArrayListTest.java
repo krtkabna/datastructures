@@ -2,6 +2,7 @@ package com.wasp.datastructures.list;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ArrayListTest extends ListTest {
@@ -18,6 +19,11 @@ public class ArrayListTest extends ListTest {
 
     @Test
     public void testEnsureCapacity() {
-        //todo
+        ArrayList arrayList = new ArrayList(3);
+        assertEquals(3, arrayList.getCurrentCapacity());
+        arrayList.add(1);
+        arrayList.add(2);
+        arrayList.add(3);
+        assertEquals((int)(3 * 1.5), arrayList.getCurrentCapacity());
     }
 }

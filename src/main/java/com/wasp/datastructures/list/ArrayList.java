@@ -2,6 +2,7 @@ package com.wasp.datastructures.list;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class ArrayList implements List {
     private static final int DEFAULT_CAPACITY = 16;
@@ -14,8 +15,8 @@ public class ArrayList implements List {
         this(DEFAULT_CAPACITY);
     }
 
-    public ArrayList(int capacity) {
-        array = new Object[capacity];
+    public ArrayList(int initialCapacity) {
+        array = new Object[initialCapacity];
         this.size = 0;
     }
 
@@ -107,18 +108,16 @@ public class ArrayList implements List {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        StringJoiner sj = new StringJoiner(", ", "[", "]");
         for (int i = 0; i < size(); i++) {
-            sb.append(array[i].toString());
-
-            if (size() - i == 1) {
-                sb.append("]");
-            } else {
-                sb.append(", ");
-            }
+            sj.add(String.valueOf(array[i]));
         }
-        return sb.toString();
+        return sj.toString();
+    }
+
+    //for test purposes only
+    int getCurrentCapacity() {
+        return array.length;
     }
 
     private void checkIndexOOB(int index) {
