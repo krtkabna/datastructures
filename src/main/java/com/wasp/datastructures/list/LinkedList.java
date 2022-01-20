@@ -2,6 +2,7 @@ package com.wasp.datastructures.list;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 public class LinkedList implements List, Iterable {
     private static final String INDEX_OOB_MSG = "Index out of bounds: ";
@@ -52,7 +53,7 @@ public class LinkedList implements List, Iterable {
         Object result;
         if (size == 0) {            //empty list
             result = null;
-} else if (index == 0) {            //remove head and shift
+        } else if (index == 0) {    //remove head and shift
             result = head.data;
             head = head.next;
             head.prev = null;
@@ -88,10 +89,10 @@ public class LinkedList implements List, Iterable {
         checkIndexOOB(index);
         Node toSet = new Node(value);
         Node temp = head;
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < index; i++) {//find index
             temp = temp.next;
         }
-        temp.data = toSet.data;
+        temp.data = toSet.data;         //change data
         return temp.data;
     }
 
@@ -141,19 +142,13 @@ public class LinkedList implements List, Iterable {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
         Node temp = head;
         for (int i = 0; i < size(); i++) {
-            sb.append(temp.data.toString());
-            if (i == size() - 1) {
-                sb.append("]");
-            } else {
-                sb.append(", ");
-            }
+            stringJoiner.add(temp.data.toString());
             temp = temp.next;
         }
-        return sb.toString();
+        return stringJoiner.toString();
     }
 
     private void checkIndexOOB(int index) {
@@ -162,23 +157,31 @@ public class LinkedList implements List, Iterable {
         }
     }
 
-    //todo
     @Override
     public Iterator iterator() {
         return new Iterator() {
+            Node current = head;
+
             @Override
             public boolean hasNext() {
-                return false;
+                return current != null;
             }
 
             @Override
             public Object next() {
-                return null;
+                Object result = current.data;
+                current = current.next;
+                return result;
             }
 
             @Override
             public void remove() {
-                Iterator.super.remove();
+                if (current == head) {
+                    head = head.next;
+                }
+                current = current.next;
+                current.prev = current.prev.prev;
+                size--;
             }
         };
     }
