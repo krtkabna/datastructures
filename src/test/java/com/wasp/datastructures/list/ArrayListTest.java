@@ -1,17 +1,23 @@
 package com.wasp.datastructures.list;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ArrayListTest extends ListTest {
 
-    @BeforeEach
-    public void init() {
-        list = new ArrayList();
-        list.add(10);
-        list.add(20);
-        list.add(30);
-        list.add(40);
-        list.add(40);
-        list.add(50);
+    @Override
+    protected List createList() {
+        return new ArrayList();
+    }
+
+    @Test
+    public void testNegativeCapacity() {
+        assertThrows(NegativeArraySizeException.class, () -> new ArrayList(-42));
+    }
+
+    @Test
+    public void testEnsureCapacity() {
+        //todo
     }
 }

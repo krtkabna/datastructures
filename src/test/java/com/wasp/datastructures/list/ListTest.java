@@ -1,5 +1,6 @@
 package com.wasp.datastructures.list;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,12 +9,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class ListTest {
-    List list;
+    private List list = createList();
 
-    @Test
-    public void testNegativeCapacity() {
-        assertThrows(NegativeArraySizeException.class,
-            () -> new ArrayList(-42));
+    protected abstract List createList();
+
+    @BeforeEach
+    public void init() {
+        list = new ArrayList();
+        list.add(10);
+        list.add(20);
+        list.add(30);
+        list.add(40);
+        list.add(40);
+        list.add(50);
     }
 
     @Test
