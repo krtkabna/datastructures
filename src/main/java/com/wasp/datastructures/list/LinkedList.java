@@ -151,9 +151,13 @@ public class LinkedList extends AbstractList implements List, Iterable {
                 if (curr == head) {
                     head = head.next;
                     head.prev = null;
+                } else if (curr == tail) {
+                    tail = tail.prev;
+                    tail.next = null;
                 } else {
-                    curr.prev.next = curr.next;//no problem
-                    curr.next.prev = curr.prev;//problem here
+                    Node temp = curr.prev;
+                    temp.next.prev = temp.prev;
+                    temp.prev.next = temp.next;
                 }
 
                 size--;
