@@ -12,17 +12,7 @@ public class LinkedList implements List {
 
     @Override
     public void add(Object value) {
-        Node newNode = new Node(value);
-        if (head == null) {
-            head = newNode;
-        } else {
-            Node tail = head;
-            while(tail.next != null){
-                tail = tail.next;
-            }
-            tail.next = newNode;
-        }
-        size++;
+        add(value, size() - 1);
     }
 
     @Override
