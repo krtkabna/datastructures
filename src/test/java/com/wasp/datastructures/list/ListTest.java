@@ -15,7 +15,6 @@ public abstract class ListTest {
 
     @BeforeEach
     public void init() {
-        list = new ArrayList();
         list.add(10);
         list.add(20);
         list.add(30);
@@ -45,6 +44,11 @@ public abstract class ListTest {
         assertEquals(6, list.size());
         assertThrows(IndexOutOfBoundsException.class,
             () -> list.get(8));
+    }
+
+    @Test
+    public void testAddToEmptyList() {
+
     }
 
     @Test
