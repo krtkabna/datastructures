@@ -1,10 +1,12 @@
 package com.wasp.datastructures.list;
 
+import java.util.Iterator;
 import java.util.Objects;
 
-public class LinkedList implements List {
+public class LinkedList implements List, Iterable {
     private static final String INDEX_OOB_MSG = "Index out of bounds: ";
     private Node head;
+    private Node tail;
     private int size;
 
     public LinkedList() {
@@ -12,17 +14,7 @@ public class LinkedList implements List {
 
     @Override
     public void add(Object value) {
-        Node newNode = new Node(value);
-        if (head == null) {
-            head = newNode;
-        } else {
-            Node tail = head;
-            while(tail.next != null) {
-                tail = tail.next;
-            }
-            tail.next = newNode;
-        }
-        size++;
+        add(value, size);
     }
 
     @Override
@@ -30,35 +22,53 @@ public class LinkedList implements List {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(INDEX_OOB_MSG + index);
         }
-        Node temp = new Node(value);
-        Node current = head;
-        for (int i = 0; i < index - 1; i++) {
-            current = current.next;
+        Node newNode = new Node(value);
+        if (head == null) {
+            head = tail = newNode;
+        } else if (index == 0) {    //add to head
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        } else if (index == size) { //add to tail
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+            tail.next = null;
+        } else {                    //generic case
+            Node current = head;
+            for (int i = 0; i < index - 1; i++) {
+                current = current.next; //find previous for newNode
+            }
+            newNode.next = current.next;
+            current.next = newNode;
+            newNode.prev = current;
         }
-        temp.next = current.next;
-        current.next = temp;
-
         size++;
     }
 
     @Override
     public Object remove(int index) {
         checkIndexOOB(index);
-        Node curr = head;
         Object result;
-        if (index == 0) {
-            result = curr.data;
-            curr.next = head;
-        } else {
-            Node prev = head;
+        if (size == 0) {            //empty list
+            result = null;
+} else if (index == 0) {            //remove head and shift
+            result = head.data;
+            head = head.next;
+            head.prev = null;
+        } else if (index == size) {
+            result = tail.data;
+            tail = tail.prev;
+            tail.next = null;
+        } else {                    //traverse and update links
+            Node curr = head;
             for (int i = 1; i < index; i++) {
-                prev = curr;
-                curr = curr.next;
+                curr = curr.next;   //find element to remove
             }
             result = curr.data;
-            prev.next = curr.next.next;
+            curr.next.prev = curr.prev;
+            curr.prev.next = curr.next;
         }
-
         size--;
         return result;
     }
@@ -152,13 +162,34 @@ public class LinkedList implements List {
         }
     }
 
-    class Node {
+    //todo
+    @Override
+    public Iterator iterator() {
+        return new Iterator() {
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public Object next() {
+                return null;
+            }
+
+            @Override
+            public void remove() {
+                Iterator.super.remove();
+            }
+        };
+    }
+
+    private class Node {
         Object data;
+        Node prev;
         Node next;
 
         Node(Object o) {
             this.data = o;
-            next = null;
         }
     }
 }
