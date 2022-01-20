@@ -11,7 +11,8 @@ public abstract class ListTest {
 
     @Test
     public void testNegativeCapacity() {
-        assertThrows(NegativeArraySizeException.class, () -> new ArrayList(-42));
+        assertThrows(NegativeArraySizeException.class,
+            () -> new ArrayList(-42));
     }
 
     @Test
@@ -26,6 +27,15 @@ public abstract class ListTest {
         assertEquals(6, list.size());
         assertThrows(IndexOutOfBoundsException.class,
             () -> list.remove(8));
+    }
+
+    @Test
+    public void testGetIndexOOB() {
+        assertThrows(IndexOutOfBoundsException.class,
+            () -> list.get(-3));
+        assertEquals(6, list.size());
+        assertThrows(IndexOutOfBoundsException.class,
+            () -> list.get(8));
     }
 
     @Test
@@ -48,7 +58,7 @@ public abstract class ListTest {
     }
 
     @Test
-    public void testRemove() {
+    public void testRemoveByIndex() {
         assertEquals(6, list.size());
         assertEquals(10, list.remove(0));
         assertEquals(20, list.get(0));
@@ -56,7 +66,7 @@ public abstract class ListTest {
     }
 
     @Test
-    public void testGet() {
+    public void testGetByIndex() {
         list.set(1, 0);
         list.set(2, 1);
         assertEquals(1, list.get(0));
@@ -64,7 +74,8 @@ public abstract class ListTest {
     }
 
     @Test
-    public void testSet() {
+    public void testSetByIndex() {
+        assertEquals(20, list.get(1));
         list.set(13, 1);
         assertEquals(13, list.get(1));
     }
@@ -93,14 +104,14 @@ public abstract class ListTest {
     }
 
     @Test
-    public void testContains() {
+    public void testContainsValue() {
         list.add(9);
         assertTrue(list.contains(9));
         assertFalse(list.contains(42));
     }
 
     @Test
-    public void testIndexOf() {
+    public void testIndexOfValue() {
         list.clear();
         list.add(10);
         list.add(20);
@@ -110,7 +121,7 @@ public abstract class ListTest {
     }
 
     @Test
-    public void testLastIndexOf() {
+    public void testLastIndexOfValue() {
         list.clear();
         list.add(10);
         list.add(20);
