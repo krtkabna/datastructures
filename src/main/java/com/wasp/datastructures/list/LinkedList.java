@@ -1,10 +1,11 @@
 package com.wasp.datastructures.list;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class LinkedList extends AbstractList implements List, Iterable {
+public class LinkedList<E> extends AbstractList<E> implements List<E>, Iterable {
     private Node head;
     private Node tail;
 
@@ -12,9 +13,9 @@ public class LinkedList extends AbstractList implements List, Iterable {
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(E value, int index) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException(INDEX_OOB_MSG + index);
+            throw new IndexOutOfBoundsException(INDEX_OOB_MSG_FORMAT + index);
         }
         Node newNode = new Node(value);
         if (head == null) {
@@ -41,9 +42,9 @@ public class LinkedList extends AbstractList implements List, Iterable {
     }
 
     @Override
-    public Object remove(int index) {
+    public E remove(int index) {
         checkIndexOOB(index);
-        Object result;
+        E result;
         if (size == 0) {            //empty list
             result = null;
         } else if (index == 0) {    //remove head and shift
@@ -68,7 +69,7 @@ public class LinkedList extends AbstractList implements List, Iterable {
     }
 
     @Override
-    public Object get(int index) {
+    public E get(int index) {
         checkIndexOOB(index);
         Node temp = head;
         for (int i = 0; i < index; i++) {
@@ -78,7 +79,7 @@ public class LinkedList extends AbstractList implements List, Iterable {
     }
 
     @Override
-    public Object set(Object value, int index) {
+    public E set(E value, int index) {
         checkIndexOOB(index);
         Node toSet = new Node(value);
         Node temp = head;
@@ -96,7 +97,7 @@ public class LinkedList extends AbstractList implements List, Iterable {
     }
 
     @Override
-    public int indexOf(Object value) {
+    public int indexOf(E value) {
         Node temp = head;
         for (int i = 0; i < size(); i++) {
             if (Objects.equals(temp.data, value)) {
@@ -108,7 +109,7 @@ public class LinkedList extends AbstractList implements List, Iterable {
     }
 
     @Override
-    public int lastIndexOf(Object value) {
+    public int lastIndexOf(E value) {
         Node temp = head;
         for (int i = size() - 1; i >= 0; i--) {
             if (Objects.equals(temp.data, value)) {
@@ -140,37 +141,49 @@ public class LinkedList extends AbstractList implements List, Iterable {
             }
 
             @Override
-            public Object next() {
-                Object result = curr.data;
+            public E next() {
+                checkEmptyList();
+
+                E result = curr.data;
                 curr = curr.next;
                 return result;
             }
 
             @Override
             public void remove() {
+                checkEmptyList();
+
                 if (curr == head) {
                     head = head.next;
                     head.prev = null;
                 } else if (curr == tail) {
                     tail = tail.prev;
                     tail.next = null;
+                } else if (curr == null) {
+                    size--;
+                    return;
                 } else {
-                    Node temp = curr.prev;
-                    temp.next.prev = temp.prev;
-                    temp.prev.next = temp.next;
+                    curr.prev.next = curr.next;
+                    curr.next.prev = curr.prev;
                 }
 
                 size--;
+            }
+
+            private void checkEmptyList() {
+                if (head == null) {
+                    throw new IteratingEmptyListException();
+                }
             }
         };
     }
 
     private class Node {
-        Object data;
+        E data;
         Node prev;
         Node next;
 
-        Node(Object o) {
+        Node(E o) {
             this.data = o;
         }
     }

@@ -1,11 +1,11 @@
 package com.wasp.datastructures.list;
 
-public abstract class AbstractList implements List {
-    static final String INDEX_OOB_MSG = "Index out of bounds: ";
+public abstract class AbstractList<E> implements List<E> {
+    static final String INDEX_OOB_MSG_FORMAT = "Index %s is out of bounds in [0, %s]";
     int size;
 
     @Override
-    public void add(Object value) {
+    public void add(E value) {
         add(value, size);
     }
 
@@ -20,13 +20,13 @@ public abstract class AbstractList implements List {
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(E value) {
         return indexOf(value) != -1;
     }
 
     void checkIndexOOB(int index) {
         if (index < 0 || (index >= size())) {
-            throw new IndexOutOfBoundsException(INDEX_OOB_MSG + index);
+            throw new IndexOutOfBoundsException(String.format(INDEX_OOB_MSG_FORMAT, index, size - 1));
         }
     }
 }

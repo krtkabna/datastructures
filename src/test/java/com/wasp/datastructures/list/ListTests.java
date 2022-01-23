@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class ListTests {
-    private List list = createList();
+    private List<Integer> list = createList();
 
-    protected abstract List createList();
+    protected abstract List<Integer> createList();
 
     @BeforeEach
     public void init() {

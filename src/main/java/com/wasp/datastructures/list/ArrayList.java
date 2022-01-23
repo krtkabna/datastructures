@@ -5,26 +5,26 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class ArrayList extends AbstractList implements List, Iterable {
+public class ArrayList<E> extends AbstractList<E> implements List<E>, Iterable {
     private static final int DEFAULT_CAPACITY = 16;
     private static final double GROW_FACTOR = 1.5;
-    private Object[] array;
+    private E[] array;
 
     public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
 
     public ArrayList(int initialCapacity) {
-        array = new Object[initialCapacity];
+        array = (E[]) new Object[initialCapacity];
         this.size = 0;
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(E value, int index) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException(INDEX_OOB_MSG + index);
+            throw new IndexOutOfBoundsException(String.format(INDEX_OOB_MSG_FORMAT, index, size));
         }
-        ensureCapasity();
+        ensureCapacity();
 
         System.arraycopy(array, index, array, index + 1, size - index + 1);
         array[index] = value;
@@ -33,28 +33,28 @@ public class ArrayList extends AbstractList implements List, Iterable {
     }
 
     @Override
-    public Object remove(int index) {
+    public E remove(int index) {
         checkIndexOOB(index);
-        Object before = get(index);
+        E before = get(index);
 
         if (size() - index >= 0) {
             System.arraycopy(array, index + 1, array, index, size() - index);
         }
-        this.size--;
+        size--;
 
         return before;
     }
 
     @Override
-    public Object get(int index) {
+    public E get(int index) {
         checkIndexOOB(index);
         return array[index];
     }
 
     @Override
-    public Object set(Object value, int index) {
+    public E set(E value, int index) {
         checkIndexOOB(index);
-        Object before = array[index];
+        E before = array[index];
         array[index] = value;
 
         return before;
@@ -62,12 +62,12 @@ public class ArrayList extends AbstractList implements List, Iterable {
 
     @Override
     public void clear() {
-        array = new Object[array.length];
+        array = (E[]) new Object[array.length];
         size = 0;
     }
 
     @Override
-    public int indexOf(Object value) {
+    public int indexOf(E value) {
         for (int i = 0; i < size(); i++) {
             if (Objects.equals(array[i], value)) {
                 return i;
@@ -77,7 +77,7 @@ public class ArrayList extends AbstractList implements List, Iterable {
     }
 
     @Override
-    public int lastIndexOf(Object value) {
+    public int lastIndexOf(E value) {
         for (int i = size() - 1; i >= 0; i--) {
             if (Objects.equals(array[i], value)) {
                 return i;
@@ -99,15 +99,14 @@ public class ArrayList extends AbstractList implements List, Iterable {
         return array.length;
     }
 
-    private void ensureCapasity() {
+    private void ensureCapacity() {
         if (size() + 1 >= array.length) {
             int capacity = (int) (array.length * GROW_FACTOR);
-            Object[] temp = Arrays.copyOf(array, capacity);
+            E[] temp = (E[]) Arrays.copyOf(array, capacity);
             array = temp;
         }
     }
 
-    @Override
     public Iterator iterator() {
         return new Iterator() {
             int index = 0;
@@ -118,13 +117,21 @@ public class ArrayList extends AbstractList implements List, Iterable {
             }
 
             @Override
-            public Object next() {
+            public E next() {
+                checkEmptyList();
                 return get(index++);
             }
 
             @Override
             public void remove() {
+                checkEmptyList();
                 ArrayList.this.remove(index - 1);
+            }
+
+            private void checkEmptyList() {
+                if (size == 0) {
+                    throw new IteratingEmptyListException();
+                }
             }
         };
     }
