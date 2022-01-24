@@ -5,9 +5,9 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class LinkedList<E> extends AbstractList<E> implements List<E>, Iterable {
-    private Node head;
-    private Node tail;
+public class LinkedList<E> extends AbstractList<E> implements List<E> {
+    private Node<E> head;
+    private Node<E> tail;
 
     public LinkedList() {
     }
@@ -48,19 +48,20 @@ public class LinkedList<E> extends AbstractList<E> implements List<E>, Iterable 
         if (size == 0) {            //empty list
             result = null;
         } else if (index == 0) {    //remove head and shift
-            result = head.data;
+            result = (E) head.data;
             head = head.next;
             head.prev = null;
         } else if (index == size) {
-            result = tail.data;
+            result = (E) tail.data;
             tail = tail.prev;
             tail.next = null;
         } else {                    //traverse and update links
-            Node curr = head;
+            Node<E> curr = head;
+            //fixme проход с двух сторон в отдельном методе
             for (int i = 1; i < index; i++) {
                 curr = curr.next;   //find element to remove
             }
-            result = curr.data;
+            result = (E) curr.data;
             curr.next.prev = curr.prev;
             curr.prev.next = curr.next;
         }
@@ -71,7 +72,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E>, Iterable 
     @Override
     public E get(int index) {
         checkIndexOOB(index);
-        Node temp = head;
+        Node<E> temp = head;
         for (int i = 0; i < index; i++) {
             temp = temp.next;
         }
@@ -81,8 +82,9 @@ public class LinkedList<E> extends AbstractList<E> implements List<E>, Iterable 
     @Override
     public E set(E value, int index) {
         checkIndexOOB(index);
-        Node toSet = new Node(value);
-        Node temp = head;
+        Node<E> toSet = new Node(value);
+        Node<E> temp = head;
+        //fixme проход с двух сторон в отдельном методе
         for (int i = 0; i < index; i++) {//find index
             temp = temp.next;
         }
@@ -111,6 +113,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E>, Iterable 
     @Override
     public int lastIndexOf(E value) {
         Node temp = head;
+        //fixme проход с двух сторон в отдельном методе
         for (int i = size() - 1; i >= 0; i--) {
             if (Objects.equals(temp.data, value)) {
                 return i;
@@ -123,6 +126,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E>, Iterable 
     public String toString() {
         StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
         Node temp = head;
+        //fixme use iterator
         for (int i = 0; i < size(); i++) {
             stringJoiner.add(temp.data.toString());
             temp = temp.next;
@@ -130,58 +134,61 @@ public class LinkedList<E> extends AbstractList<E> implements List<E>, Iterable 
         return stringJoiner.toString();
     }
 
-    @Override
-    public Iterator iterator() {
-        return new Iterator() {
-            Node curr = head;
+    private class LLIterator<E> implements Iterator<E> {
+        Node<E> curr = (Node<E>) head;
 
-            @Override
-            public boolean hasNext() {
-                return curr != null;
-            }
+        @Override
+        public boolean hasNext() {
+            return curr != null;
+        }
 
-            @Override
-            public E next() {
-                checkEmptyList();
+        @Override
+        public E next() {
+            checkEmptyList();
 
-                E result = curr.data;
-                curr = curr.next;
-                return result;
-            }
+            E result = curr.data;
+            curr = curr.next;
+            return result;
+        }
 
-            @Override
-            public void remove() {
-                checkEmptyList();
+        @Override
+        public void remove() {
+            checkEmptyList();
 
-                if (curr == head) {
-                    head = head.next;
-                    head.prev = null;
-                } else if (curr == tail) {
-                    tail = tail.prev;
-                    tail.next = null;
-                } else if (curr == null) {
-                    size--;
-                    return;
-                } else {
-                    curr.prev.next = curr.next;
-                    curr.next.prev = curr.prev;
-                }
-
+            if (curr == head) {
+                head = head.next;
+                head.prev = null;
+            } else if (curr == tail) {
+                tail = tail.prev;
+                tail.next = null;
+            } else if (curr == null) {
                 size--;
+                return;
+            } else {
+                curr.prev.next = curr.next;
+                curr.next.prev = curr.prev;
             }
 
-            private void checkEmptyList() {
-                if (head == null) {
-                    throw new IteratingEmptyListException();
-                }
+            size--;
+        }
+
+        private void checkEmptyList() {
+            if (head == null) {
+                throw new IteratingEmptyListException();
             }
-        };
+        }
     }
 
-    private class Node {
+    @Override
+    public Iterator<E> iterator() {
+        return new LLIterator<>();
+    }
+
+    //doesn't need link to list instance
+    private static class Node<E> {
         E data;
-        Node prev;
-        Node next;
+        Node<E> prev;
+        Node<E> next;
 
         Node(E o) {
             this.data = o;

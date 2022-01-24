@@ -1,7 +1,7 @@
 package com.wasp.datastructures.list;
 
 // Abstract Data Type
-public interface List<E> {
+public interface List<E> extends Iterable<E> {
     // add value to the end of the list
     void add(E value);
 

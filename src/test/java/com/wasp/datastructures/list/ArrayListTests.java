@@ -33,78 +33,78 @@ public class ArrayListTests extends ListTests {
         assertEquals((int)(3 * 1.5), arrayList.getCurrentCapacity());
     }
 
-    @Test
-    public void testIteratorHasNext() {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(10);
-        list.add(20);
-        Iterator iterator = list.iterator();
-
-        assertTrue(iterator.hasNext());
-        assertNotNull(iterator.next());
-
-        assertTrue(iterator.hasNext());
-        assertNotNull(iterator.next());
-
-        assertFalse(iterator.hasNext());
-    }
-
-    @Test
-    public void testIteratorHasNextOnEmptyList() {
-        ArrayList<Integer> list = new ArrayList<>();
-        Iterator iterator = list.iterator();
-
-        assertFalse(iterator.hasNext());
-    }
-
-    @Test
-    public void testIteratorNext() {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(1);
-        Iterator iterator = list.iterator();
-
-        assertNotNull(iterator.next());
-        assertThrows(IndexOutOfBoundsException.class, () -> iterator.next());
-    }
-
-    @Test
-    public void testIteratorNextOnEmptyList() {
-        ArrayList<Integer> list = new ArrayList<>();
-        Iterator iterator = list.iterator();
-
-        assertThrows(IteratingEmptyListException.class, () -> iterator.next());
-    }
-
-    @Test
-    public void testIteratorRemove() {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(1);
-        Iterator iterator = list.iterator();
-
-        iterator.next();
-        iterator.remove();
-
-        assertEquals(0, list.size());
-    }
-
-    @Test
-    public void testIteratorRemoveOnEmptyList() {
-        ArrayList<Integer> list = new ArrayList<>();
-        Iterator iterator = list.iterator();
-
-        assertEquals(0, list.size());
-        assertThrows(IteratingEmptyListException.class, () -> iterator.remove());
-    }
-
-    @Test
-    public void testForEach() {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(10);
-        list.add(20);
-        list.add(30);
-
-        for (Object o: list) {
-            assertNotNull(o);
-        }
-    }
+//    @Test
+//    public void testIteratorHasNext() {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        list.add(10);
+//        list.add(20);
+//        Iterator<Integer> iterator = list.iterator();
+//
+//        assertTrue(iterator.hasNext());
+//        assertNotNull(iterator.next());
+//
+//        assertTrue(iterator.hasNext());
+//        assertNotNull(iterator.next());
+//
+//        assertFalse(iterator.hasNext());
+//    }
+//
+//    @Test
+//    public void testIteratorHasNextOnEmptyList() {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        Iterator iterator = list.iterator();
+//
+//        assertFalse(iterator.hasNext());
+//    }
+//
+//    @Test
+//    public void testIteratorNext() {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        list.add(1);
+//        Iterator<Integer> iterator = list.iterator();
+//
+//        assertNotNull(iterator.next());
+//        assertThrows(IndexOutOfBoundsException.class, iterator::next);
+//    }
+//
+//    @Test
+//    public void testIteratorNextOnEmptyList() {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        Iterator<Integer> iterator = list.iterator();
+//
+//        assertThrows(IteratingEmptyListException.class, iterator::next);
+//    }
+//
+//    @Test
+//    public void testIteratorRemove() {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        list.add(1);
+//        Iterator<Integer> iterator = list.iterator();
+//
+//        iterator.next();
+//        iterator.remove();
+//
+//        assertEquals(0, list.size());
+//    }
+//
+//    @Test
+//    public void testIteratorRemoveOnEmptyList() {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        Iterator iterator = list.iterator();
+//
+//        assertEquals(0, list.size());
+//        assertThrows(IteratingEmptyListException.class, iterator::remove);
+//    }
+//
+//    @Test
+//    public void testForEach() {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        list.add(10);
+//        list.add(20);
+//        list.add(30);
+//
+//        for (Object o: list) {
+//            assertNotNull(o);
+//        }
+//    }
 }

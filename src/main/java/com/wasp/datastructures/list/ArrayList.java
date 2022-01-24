@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class ArrayList<E> extends AbstractList<E> implements List<E>, Iterable {
+public class ArrayList<E> extends AbstractList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 16;
     private static final double GROW_FACTOR = 1.5;
     private E[] array;
@@ -102,13 +102,14 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, Iterable {
     private void ensureCapacity() {
         if (size() + 1 >= array.length) {
             int capacity = (int) (array.length * GROW_FACTOR);
-            E[] temp = (E[]) Arrays.copyOf(array, capacity);
+            E[] temp = Arrays.copyOf(array, capacity);
             array = temp;
         }
     }
 
-    public Iterator iterator() {
-        return new Iterator() {
+    public Iterator<E> iterator() {
+        return new Iterator<>() {
+            //should be before first, -1
             int index = 0;
 
             @Override

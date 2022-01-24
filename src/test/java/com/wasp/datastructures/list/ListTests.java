@@ -3,8 +3,11 @@ package com.wasp.datastructures.list;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -146,6 +149,81 @@ public abstract class ListTests {
     @Test
     public void testToString() {
         assertEquals("[10, 20, 30, 40, 40, 50]", list.toString());
+    }
+
+    @Test
+    public void testIteratorHasNext() {
+        list.clear();
+        list.add(10);
+        list.add(20);
+        Iterator<Integer> iterator = list.iterator();
+
+        assertTrue(iterator.hasNext());
+        assertNotNull(iterator.next());
+
+        assertTrue(iterator.hasNext());
+        assertNotNull(iterator.next());
+
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void testIteratorHasNextOnEmptyList() {
+        list.clear();
+        Iterator iterator = list.iterator();
+
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void testIteratorNext() {
+        list.clear();
+        list.add(1);
+        Iterator<Integer> iterator = list.iterator();
+
+        assertNotNull(iterator.next());
+        assertThrows(IndexOutOfBoundsException.class, iterator::next);
+    }
+
+    @Test
+    public void testIteratorNextOnEmptyList() {
+        list.clear();
+        Iterator<Integer> iterator = list.iterator();
+
+        assertThrows(IteratingEmptyListException.class, iterator::next);
+    }
+
+    @Test
+    public void testIteratorRemove() {
+        list.clear();
+        list.add(1);
+        Iterator<Integer> iterator = list.iterator();
+
+        iterator.next();
+        iterator.remove();
+
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    public void testIteratorRemoveOnEmptyList() {
+        list.clear();
+        Iterator iterator = list.iterator();
+
+        assertEquals(0, list.size());
+        assertThrows(IteratingEmptyListException.class, iterator::remove);
+    }
+
+    @Test
+    public void testForEach() {
+        list.clear();
+        list.add(10);
+        list.add(20);
+        list.add(30);
+
+        for (Object o: list) {
+            assertNotNull(o);
+        }
     }
 
 }
