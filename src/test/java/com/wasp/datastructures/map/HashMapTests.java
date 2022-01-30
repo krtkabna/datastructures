@@ -44,6 +44,7 @@ class HashMapTests {
     void remove() {
         map.put(5, "i");
         assertEquals("i", map.remove(5));
+        assertFalse(map.containsKey(5));
     }
 
     @Test

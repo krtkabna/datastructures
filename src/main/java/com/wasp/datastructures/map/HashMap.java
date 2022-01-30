@@ -2,6 +2,7 @@ package com.wasp.datastructures.map;
 
 import com.wasp.datastructures.exception.DataStructureIteratorException;
 import com.wasp.datastructures.list.ArrayList;
+import com.wasp.datastructures.list.LinkedList;
 import com.wasp.datastructures.list.List;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 public class HashMap<K, V> implements Map<K, V> {
     private static final int DEFAULT_CAPACITY = 10;
-    private ArrayList<Entry<K, V>>[] array;
+    private List<Entry<K, V>>[] array;
     private Set<Entry<K, V>> entrySet = new HashSet<>();
     private int size;
 
@@ -20,12 +21,13 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     public HashMap(int initialCapacity) {
-        array = (ArrayList<Entry<K, V>>[]) new ArrayList[initialCapacity];
+        array = (List<Entry<K, V>>[]) new ArrayList[initialCapacity];
         size = 0;
         for (int i = 0; i < array.length; i++) {
             array[i] = new ArrayList<>();
         }
     }
+
 
     @Override
     public V put(K key, V value) {
@@ -103,7 +105,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        for (ArrayList<Entry<K, V>> bucket : array) {
+        for (List<Entry<K, V>> bucket : array) {
             for (Entry<K, V> entry : bucket) {
                 entrySet.add(entry);
             }
@@ -141,6 +143,7 @@ public class HashMap<K, V> implements Map<K, V> {
             if (!hasNext()) {
                 throw new NoSuchElementException("No buckets left in map");
             }
+            nextCalled = true;
             return bucketIterator.next();
         }
 
@@ -151,6 +154,7 @@ public class HashMap<K, V> implements Map<K, V> {
             }
             bucketIterator.remove();
             size--;
+            nextCalled = false;
         }
 
         private boolean nextBucket() {
