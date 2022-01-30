@@ -17,20 +17,20 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(INDEX_OOB_MSG_FORMAT + index);
         }
-        Node newNode = new Node(value);
+        Node<E> newNode = new Node(value);
         if (head == null) {
             head = tail = newNode;
-        } else if (index == 0) {    //add to head
+        } else if (index == 0) {        //add to head
             newNode.next = head;
             head.prev = newNode;
             head = newNode;
-        } else if (index == size) { //add to tail
+        } else if (index == size) {     //add to tail
             tail.next = newNode;
             newNode.prev = tail;
             tail = newNode;
             tail.next = null;
-        } else {                    //generic case
-            Node current = head;
+        } else {                        //generic case
+            Node<E> current = head;
             for (int i = 0; i < index - 1; i++) {
                 current = current.next; //find previous for newNode
             }
@@ -48,11 +48,11 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
         if (size == 0) {            //empty list
             result = null;
         } else if (index == 0) {    //remove head and shift
-            result = (E) head.data;
+            result = head.data;
             head = head.next;
             head.prev = null;
         } else if (index == size) {
-            result = (E) tail.data;
+            result = tail.data;
             tail = tail.prev;
             tail.next = null;
         } else {                    //traverse and update links
@@ -61,7 +61,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
             for (int i = 1; i < index; i++) {
                 curr = curr.next;   //find element to remove
             }
-            result = (E) curr.data;
+            result = curr.data;
             curr.next.prev = curr.prev;
             curr.prev.next = curr.next;
         }
@@ -88,7 +88,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
         for (int i = 0; i < index; i++) {//find index
             temp = temp.next;
         }
-        temp.data = toSet.data;         //change data
+        temp.data = toSet.data;          //change data
         return temp.data;
     }
 
@@ -100,7 +100,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
 
     @Override
     public int indexOf(E value) {
-        Node temp = head;
+        Node<E> temp = head;
         for (int i = 0; i < size(); i++) {
             if (Objects.equals(temp.data, value)) {
                 return i;
@@ -112,7 +112,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
 
     @Override
     public int lastIndexOf(E value) {
-        Node temp = head;
+        Node<E> temp = head;
         //fixme проход с двух сторон в отдельном методе
         for (int i = size() - 1; i >= 0; i--) {
             if (Objects.equals(temp.data, value)) {
@@ -125,11 +125,8 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
 
     public String toString() {
         StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
-        Node temp = head;
-        //fixme use iterator
-        for (int i = 0; i < size(); i++) {
-            stringJoiner.add(temp.data.toString());
-            temp = temp.next;
+        for (E element : this) {
+            stringJoiner.add(element.toString());
         }
         return stringJoiner.toString();
     }
@@ -184,7 +181,6 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
         return new LLIterator<>();
     }
 
-    //doesn't need link to list instance
     private static class Node<E> {
         E data;
         Node<E> prev;
