@@ -1,7 +1,7 @@
 package com.wasp.datastructures.list;
 
+import com.wasp.datastructures.exception.DataStructureIteratorException;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -174,7 +174,7 @@ public class LinkedList<E> extends AbstractList<E> implements List<E> {
 
         private void checkEmptyList() {
             if (head == null) {
-                throw new IteratingEmptyListException();
+                throw new DataStructureIteratorException("Trying to iterate on empty list");
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.wasp.datastructures.list;
 
+import com.wasp.datastructures.exception.DataStructureIteratorException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
@@ -16,7 +17,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E> {
 
     public ArrayList(int initialCapacity) {
         array = (E[]) new Object[initialCapacity];
-        this.size = 0;
+        size = 0;
     }
 
     @Override
@@ -109,7 +110,6 @@ public class ArrayList<E> extends AbstractList<E> implements List<E> {
 
     public Iterator<E> iterator() {
         return new Iterator<>() {
-            //should be before first, -1
             int index = 0;
 
             @Override
@@ -131,7 +131,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E> {
 
             private void checkEmptyList() {
                 if (size == 0) {
-                    throw new IteratingEmptyListException();
+                    throw new DataStructureIteratorException("Trying to iterate on empty list");
                 }
             }
         };

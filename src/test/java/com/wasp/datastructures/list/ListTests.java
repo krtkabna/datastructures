@@ -1,8 +1,8 @@
 package com.wasp.datastructures.list;
 
+import com.wasp.datastructures.exception.DataStructureIteratorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,25 +28,21 @@ public abstract class ListTests {
 
     @Test
     public void testAddIndexOOB() {
-        assertThrows(IndexOutOfBoundsException.class,
-            () -> list.add(42, -1));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.add(42, -1));
 
     }
 
     @Test
     public void testRemoveIndexOOB() {
         assertEquals(6, list.size());
-        assertThrows(IndexOutOfBoundsException.class,
-            () -> list.remove(8));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.remove(8));
     }
 
     @Test
     public void testGetIndexOOB() {
-        assertThrows(IndexOutOfBoundsException.class,
-            () -> list.get(-3));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.get(-3));
         assertEquals(6, list.size());
-        assertThrows(IndexOutOfBoundsException.class,
-            () -> list.get(8));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.get(8));
     }
 
     @Test
@@ -177,12 +173,14 @@ public abstract class ListTests {
 
     @Test
     public void testIteratorNext() {
-        list.clear();
-        list.add(1);
         Iterator<Integer> iterator = list.iterator();
 
-        assertNotNull(iterator.next());
-        assertThrows(IndexOutOfBoundsException.class, iterator::next);
+        int count = 0;
+        while (iterator.hasNext()) {
+            assertNotNull(iterator.next());
+            count++;
+        }
+        assertEquals(count, list.size());
     }
 
     @Test
@@ -190,7 +188,7 @@ public abstract class ListTests {
         list.clear();
         Iterator<Integer> iterator = list.iterator();
 
-        assertThrows(IteratingEmptyListException.class, iterator::next);
+        assertThrows(DataStructureIteratorException.class, iterator::next);
     }
 
     @Test
@@ -211,7 +209,7 @@ public abstract class ListTests {
         Iterator iterator = list.iterator();
 
         assertEquals(0, list.size());
-        assertThrows(IteratingEmptyListException.class, iterator::remove);
+        assertThrows(DataStructureIteratorException.class, iterator::remove);
     }
 
     @Test
@@ -221,7 +219,7 @@ public abstract class ListTests {
         list.add(20);
         list.add(30);
 
-        for (Object o: list) {
+        for (Object o : list) {
             assertNotNull(o);
         }
     }
