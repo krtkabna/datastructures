@@ -2,7 +2,6 @@ package com.wasp.datastructures.map;
 
 import com.wasp.datastructures.exception.DataStructureIteratorException;
 import com.wasp.datastructures.list.ArrayList;
-import com.wasp.datastructures.list.LinkedList;
 import com.wasp.datastructures.list.List;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,10 +30,9 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public V put(K key, V value) {
-        int i = getBucketIndex(key);
         V result = null;
 
-        List<Entry<K, V>> bucket = array[i];
+        List<Entry<K, V>> bucket = getBucket(key);
         if (bucket.isEmpty()) {
             bucket.add(new Entry<>(key, value));
             size++;
@@ -56,8 +54,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
-        int i = getBucketIndex(key);
-        List<Entry<K, V>> bucket = array[i];
+        List<Entry<K, V>> bucket = getBucket(key);
         V result = null;
 
         if (!bucket.isEmpty()) {
@@ -72,8 +69,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public V remove(K key) {
-        int i = getBucketIndex(key);
-        Iterator<Entry<K, V>> bucketIterator = array[i].iterator();
+        Iterator<Entry<K, V>> bucketIterator = getBucket(key).iterator();
         V result = null;
         while (bucketIterator.hasNext()) {
             Entry<K, V> entry = bucketIterator.next();
@@ -89,8 +85,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(K key) {
-        int i = getBucketIndex(key);
-        for (Entry<K, V> entry : array[i]) {
+        for (Entry<K, V> entry : getBucket(key)) {
             if (Objects.equals(entry.key, key)) {
                 return true;
             }
@@ -118,13 +113,8 @@ public class HashMap<K, V> implements Map<K, V> {
         return new HashMapIterator();
     }
 
-    private int getBucketIndex(K key) {
-        if (key != null) {
-            return Math.abs(key.hashCode()) % array.length;
-        } else return 0;
-    }
-
     private class HashMapIterator implements Iterator<Entry<K, V>> {
+
         private boolean nextCalled = false;
         private int bucketIndex = -1;
         Iterator<Entry<K, V>> bucketIterator = null;
@@ -166,5 +156,12 @@ public class HashMap<K, V> implements Map<K, V> {
             } while (!bucketIterator.hasNext());
             return true;
         }
+
+    }
+
+    private List<Entry<K, V>> getBucket(K key) {
+        if (key != null) {
+            return array[Math.abs(key.hashCode()) % array.length];
+        } else return array[0];
     }
 }
