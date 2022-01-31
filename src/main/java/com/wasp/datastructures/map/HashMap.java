@@ -122,7 +122,7 @@ public class HashMap<K, V> implements Map<K, V> {
         @Override
         public boolean hasNext() {
             if (bucketIterator == null || !bucketIterator.hasNext()) {
-                return nextBucket();
+                return incrementBucketIterator();
             } else {
                 return true;
             }
@@ -147,7 +147,7 @@ public class HashMap<K, V> implements Map<K, V> {
             nextCalled = false;
         }
 
-        private boolean nextBucket() {
+        private boolean incrementBucketIterator() {
             do {
                 if (++bucketIndex >= array.length) {
                     return false;
