@@ -1,6 +1,5 @@
 package com.wasp.datastructures.map;
 
-import com.wasp.datastructures.exception.DataStructureIteratorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Iterator;
@@ -127,7 +126,7 @@ class HashMapTests {
 
     @Test
     void iteratorRemoveWithoutCallingNext() {
-        RuntimeException e = assertThrows(DataStructureIteratorException.class, () -> iterator.remove());
+        RuntimeException e = assertThrows(IllegalStateException.class, () -> iterator.remove());
         assertEquals("Calling remove() before calling next()", e.getMessage());
     }
 }

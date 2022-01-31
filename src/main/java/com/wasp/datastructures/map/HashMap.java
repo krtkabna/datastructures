@@ -1,6 +1,5 @@
 package com.wasp.datastructures.map;
 
-import com.wasp.datastructures.exception.DataStructureIteratorException;
 import com.wasp.datastructures.list.ArrayList;
 import com.wasp.datastructures.list.List;
 import java.util.HashSet;
@@ -140,7 +139,7 @@ public class HashMap<K, V> implements Map<K, V> {
         @Override
         public void remove() {
             if (!nextCalled) {
-                throw new DataStructureIteratorException("Calling remove() before calling next()");
+                throw new IllegalStateException("Calling remove() before calling next()");
             }
             bucketIterator.remove();
             size--;
