@@ -37,7 +37,7 @@ public class HashMap<K, V> implements Map<K, V> {
             size++;
         } else {
             for (Entry<K, V> entry : bucket) {
-                if (key.equals(entry.key)) {
+                if (Objects.equals(key, entry.key)) {
                     result = entry.value;
                     entry.value = value;
                 }
@@ -58,7 +58,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
         if (!bucket.isEmpty()) {
             for (Entry<K, V> entry : bucket) {
-                if (key.equals(entry.key)) {
+                if (Objects.equals(key, entry.key)) {
                     result = entry.value;
                 }
             }
@@ -72,7 +72,7 @@ public class HashMap<K, V> implements Map<K, V> {
         V result = null;
         while (bucketIterator.hasNext()) {
             Entry<K, V> entry = bucketIterator.next();
-            if (key.equals(entry.key)) {
+            if (Objects.equals(key, entry.key)) {
                 result = entry.value;
                 bucketIterator.remove();
                 size--;
@@ -160,7 +160,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     private List<Entry<K, V>> getBucket(K key) {
         if (key != null) {
-            return array[Math.abs(key.hashCode()) % array.length];
+            return array[Math.abs(key.hashCode() % array.length)];
         } else return array[0];
     }
 }
