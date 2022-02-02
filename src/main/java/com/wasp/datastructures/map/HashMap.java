@@ -37,9 +37,9 @@ public class HashMap<K, V> implements Map<K, V> {
             size++;
         } else {
             for (Entry<K, V> entry : bucket) {
-                if (Objects.equals(key, entry.key)) {
-                    result = entry.value;
-                    entry.value = value;
+                if (Objects.equals(key, entry.getKey())) {
+                    result = entry.getValue();
+                    entry.setValue(value);
                 }
             }
             if (result == null) {
@@ -58,8 +58,8 @@ public class HashMap<K, V> implements Map<K, V> {
 
         if (!bucket.isEmpty()) {
             for (Entry<K, V> entry : bucket) {
-                if (Objects.equals(key, entry.key)) {
-                    result = entry.value;
+                if (Objects.equals(key, entry.getKey())) {
+                    result = entry.getValue();
                 }
             }
         }
@@ -72,8 +72,8 @@ public class HashMap<K, V> implements Map<K, V> {
         V result = null;
         while (bucketIterator.hasNext()) {
             Entry<K, V> entry = bucketIterator.next();
-            if (Objects.equals(key, entry.key)) {
-                result = entry.value;
+            if (Objects.equals(key, entry.getKey())) {
+                result = entry.getValue();
                 bucketIterator.remove();
                 size--;
             }
@@ -85,7 +85,7 @@ public class HashMap<K, V> implements Map<K, V> {
     @Override
     public boolean containsKey(K key) {
         for (Entry<K, V> entry : getBucket(key)) {
-            if (Objects.equals(entry.key, key)) {
+            if (Objects.equals(entry.getKey(), key)) {
                 return true;
             }
         }
