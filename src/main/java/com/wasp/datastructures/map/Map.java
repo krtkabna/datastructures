@@ -1,6 +1,7 @@
 package com.wasp.datastructures.map;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 public interface Map<K, V> extends Iterable<Map.Entry<K, V>> {
@@ -46,6 +47,14 @@ public interface Map<K, V> extends Iterable<Map.Entry<K, V>> {
                 "key=" + key +
                 ", value=" + value +
                 '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Entry)) return false;
+            Entry<?, ?> entry = (Entry<?, ?>) o;
+            return Objects.equals(getKey(), entry.getKey()) && Objects.equals(getValue(), entry.getValue());
         }
     }
 

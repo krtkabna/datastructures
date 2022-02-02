@@ -1,5 +1,6 @@
 package com.wasp.datastructures.map;
 
+import com.wasp.datastructures.list.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Iterator;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HashMapTests {
     private static final Map<Integer, String> EMPTY_MAP = new HashMap<>();
-    private Map<Integer, String> map = new HashMap<>();
+    private Map<Integer, String> map = new HashMap<>(10);
     private Iterator<Map.Entry<Integer, String>> iterator = map.iterator();
 
     @BeforeEach
@@ -128,5 +129,36 @@ class HashMapTests {
     void iteratorRemoveWithoutCallingNext() {
         RuntimeException e = assertThrows(IllegalStateException.class, () -> iterator.remove());
         assertEquals("Calling remove() before calling next()", e.getMessage());
+    }
+
+    @Test
+    void testIterator() {
+        ArrayList<Map.Entry<Integer, String>> expectedList = new ArrayList<>();
+        expectedList.add(new Map.Entry<>(2, "w"));
+        expectedList.add(new Map.Entry<>(3, "a"));
+        expectedList.add(new Map.Entry<>(1, "s"));
+        expectedList.add(new Map.Entry<>(4, "p"));
+        ArrayList<Map.Entry<Integer, String>> actualList = new ArrayList<>();
+
+        Iterator<Map.Entry<Integer, String>> it = map.iterator();
+        while (it.hasNext()) {
+            actualList.add(it.next());
+        }
+        assertEquals(expectedList.size(), actualList.size());
+        for (Map.Entry<Integer, String> entry : expectedList) {
+            System.out.println(entry);
+        }
+        for (Map.Entry<Integer, String> expectedEntry : expectedList) {
+            assertTrue(actualList.contains(expectedEntry));
+        }
+    }
+
+    @Test
+    void resize() {
+        map.put(9, "f");
+        map.put(5, "r");
+        map.put(7, "o");
+        map.put(8, "g");
+        assertEquals(20, map.size());
     }
 }

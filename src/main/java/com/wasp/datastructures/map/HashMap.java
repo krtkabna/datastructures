@@ -10,6 +10,7 @@ import java.util.Set;
 
 public class HashMap<K, V> implements Map<K, V> {
     private static final int DEFAULT_CAPACITY = 10;
+    private static final double LOAD_FACTOR = 0.75;
     private List<Entry<K, V>>[] array;
     private Set<Entry<K, V>> entrySet = new HashSet<>();
     private int size;
@@ -21,9 +22,7 @@ public class HashMap<K, V> implements Map<K, V> {
     public HashMap(int initialCapacity) {
         array = (List<Entry<K, V>>[]) new ArrayList[initialCapacity];
         size = 0;
-        for (int i = 0; i < array.length; i++) {
-            array[i] = new ArrayList<>();
-        }
+        fill();
     }
 
 
@@ -47,6 +46,9 @@ public class HashMap<K, V> implements Map<K, V> {
                 bucket.add(newEntry);
                 size++;
             }
+        }
+        if (sizeExceedsThreshold()) {
+            resize();
         }
         return result;
     }
@@ -112,9 +114,48 @@ public class HashMap<K, V> implements Map<K, V> {
         return new HashMapIterator();
     }
 
+    private void fill() {
+        for (int i = 0; i < array.length; i++) {
+            array[i] = new ArrayList<>();
+        }
+    }
+
+    private List<Entry<K, V>> getBucket(K key) {
+        if (key != null) {
+            return array[Math.abs(key.hashCode() % array.length)];
+        } else return array[0];
+    }
+
+    private boolean sizeExceedsThreshold() {
+        return size >= array.length * LOAD_FACTOR;
+    }
+
+    private void resize() {
+        Set<Entry<K, V>> temp = entrySet();
+        List<Entry<K, V>>[] newArray = new ArrayList[array.length * 2];
+        array = newArray;
+        fill();
+        reallocateBuckets(temp);
+    }
+
+    private void reallocateBuckets(Set<Entry<K, V>> entries) {
+        Iterator<Entry<K, V>> mapIterator = this.iterator();
+        while (mapIterator.hasNext()) {
+            mapIterator.next();
+            mapIterator.remove();
+        }
+
+        for (Entry<K, V> entry : entries) {
+            K key = entry.getKey();
+            V value = entry.getValue();
+            put(key, value);
+        }
+    }
+
     private class HashMapIterator implements Iterator<Entry<K, V>> {
 
         private boolean nextCalled = false;
+
         private int bucketIndex = -1;
         Iterator<Entry<K, V>> bucketIterator = null;
 
@@ -155,12 +196,5 @@ public class HashMap<K, V> implements Map<K, V> {
             } while (!bucketIterator.hasNext());
             return true;
         }
-
-    }
-
-    private List<Entry<K, V>> getBucket(K key) {
-        if (key != null) {
-            return array[Math.abs(key.hashCode() % array.length)];
-        } else return array[0];
     }
 }
