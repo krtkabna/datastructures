@@ -120,7 +120,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     private void fill() {
         for (int i = 0; i < array.length; i++) {
-            array[i] = new ArrayList<>(1, 2.0f);
+            array[i] = new ArrayList<>(1);
         }
     }
 
@@ -135,11 +135,6 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     private void resize() {
-//        Set<Entry<K, V>> temp = entrySet();
-//        List<Entry<K, V>>[] newArray = new ArrayList[array.length * 2];
-//        array = newArray;
-//        fill();
-//        reallocateBuckets(temp);
         HashMap<K, V> newMap = new HashMap<>(array.length * 2);
         for (Map.Entry<K, V> entry : this) {
             newMap.put(entry.getKey(), entry.getValue());

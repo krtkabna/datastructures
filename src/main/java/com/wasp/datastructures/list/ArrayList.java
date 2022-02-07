@@ -9,8 +9,7 @@ import java.util.StringJoiner;
 
 public class ArrayList<E> extends AbstractList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 16;
-    private static final float DEFAULT_GROW_FACTOR = 1.5f;
-    private float growFactor;
+    private static final float GROW_FACTOR = 1.5f;
     private E[] array;
 
     public ArrayList() {
@@ -18,11 +17,6 @@ public class ArrayList<E> extends AbstractList<E> implements List<E> {
     }
 
     public ArrayList(int initialCapacity) {
-        this(initialCapacity, DEFAULT_GROW_FACTOR);
-    }
-
-    public ArrayList(int initialCapacity, float growFactor) {
-        this.growFactor = growFactor;
         array = (E[]) new Object[initialCapacity];
         size = 0;
     }
@@ -109,7 +103,7 @@ public class ArrayList<E> extends AbstractList<E> implements List<E> {
 
     private void ensureCapacity() {
         if (size() + 1 >= array.length) {
-            int capacity = (int) (array.length * growFactor);
+            int capacity = Math.max((int) (array.length * GROW_FACTOR), 2);
             if (size == 1) {
                 capacity++;//round up
             }
