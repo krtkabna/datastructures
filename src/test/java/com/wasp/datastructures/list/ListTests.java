@@ -4,6 +4,7 @@ import com.wasp.datastructures.exception.DataStructureIteratorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -188,7 +189,7 @@ public abstract class ListTests {
         list.clear();
         Iterator<Integer> iterator = list.iterator();
 
-        assertThrows(DataStructureIteratorException.class, iterator::next);
+        assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Test

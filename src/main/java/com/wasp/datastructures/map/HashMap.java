@@ -12,7 +12,7 @@ public class HashMap<K, V> implements Map<K, V> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final double LOAD_FACTOR = 0.75;
     private List<Entry<K, V>>[] array;
-    private Set<Entry<K, V>> entrySet = new HashSet<>();
+    private Set<Map.Entry<K, V>> entrySet = new HashSet<>();
     private int size;
 
     public HashMap() {
@@ -100,7 +100,7 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public Set<Map.Entry<K, V>> entrySet() {
         for (List<Entry<K, V>> bucket : array) {
             for (Entry<K, V> entry : bucket) {
                 entrySet.add(entry);
@@ -110,13 +110,17 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public Iterator<Entry<K, V>> iterator() {
+    public Iterator<Map.Entry<K, V>> iterator() {
         return new HashMapIterator();
+    }
+
+    int getCapacity() {
+        return array.length;
     }
 
     private void fill() {
         for (int i = 0; i < array.length; i++) {
-            array[i] = new ArrayList<>();
+            array[i] = new ArrayList<>(1, 2.0f);
         }
     }
 
@@ -131,15 +135,20 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     private void resize() {
-        Set<Entry<K, V>> temp = entrySet();
-        List<Entry<K, V>>[] newArray = new ArrayList[array.length * 2];
-        array = newArray;
-        fill();
-        reallocateBuckets(temp);
+//        Set<Entry<K, V>> temp = entrySet();
+//        List<Entry<K, V>>[] newArray = new ArrayList[array.length * 2];
+//        array = newArray;
+//        fill();
+//        reallocateBuckets(temp);
+        HashMap<K, V> newMap = new HashMap<>(array.length * 2);
+        for (Map.Entry<K, V> entry : this) {
+            newMap.put(entry.getKey(), entry.getValue());
+        }
+        array = newMap.array;
     }
 
     private void reallocateBuckets(Set<Entry<K, V>> entries) {
-        Iterator<Entry<K, V>> mapIterator = this.iterator();
+        Iterator<Map.Entry<K, V>> mapIterator = this.iterator();
         while (mapIterator.hasNext()) {
             mapIterator.next();
             mapIterator.remove();
@@ -152,7 +161,48 @@ public class HashMap<K, V> implements Map<K, V> {
         }
     }
 
-    private class HashMapIterator implements Iterator<Entry<K, V>> {
+    static class Entry<K, V> implements Map.Entry<K, V> {
+        private final K key;
+        private V value;
+
+        public Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public K getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public void setValue(V value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "Entry{" +
+                "key=" + key +
+                ", value=" + value +
+                '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Entry)) return false;
+            Entry<?, ?> entry = (Entry<?, ?>) o;
+            return Objects.equals(getKey(), entry.getKey()) && Objects.equals(getValue(), entry.getValue());
+        }
+    }
+
+    private class HashMapIterator implements Iterator<Map.Entry<K, V>> {
 
         private boolean nextCalled = false;
 

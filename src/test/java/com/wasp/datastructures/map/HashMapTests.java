@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HashMapTests {
     private static final Map<Integer, String> EMPTY_MAP = new HashMap<>();
-    private Map<Integer, String> map = new HashMap<>(10);
+    private HashMap<Integer, String> map = new HashMap<>(10);
     private Iterator<Map.Entry<Integer, String>> iterator = map.iterator();
 
     @BeforeEach
@@ -134,10 +134,10 @@ class HashMapTests {
     @Test
     void testIterator() {
         ArrayList<Map.Entry<Integer, String>> expectedList = new ArrayList<>();
-        expectedList.add(new Map.Entry<>(2, "w"));
-        expectedList.add(new Map.Entry<>(3, "a"));
-        expectedList.add(new Map.Entry<>(1, "s"));
-        expectedList.add(new Map.Entry<>(4, "p"));
+        expectedList.add(new HashMap.Entry<>(2, "w"));
+        expectedList.add(new HashMap.Entry<>(3, "a"));
+        expectedList.add(new HashMap.Entry<>(1, "s"));
+        expectedList.add(new HashMap.Entry<>(4, "p"));
         ArrayList<Map.Entry<Integer, String>> actualList = new ArrayList<>();
 
         Iterator<Map.Entry<Integer, String>> it = map.iterator();
@@ -159,6 +159,6 @@ class HashMapTests {
         map.put(5, "r");
         map.put(7, "o");
         map.put(8, "g");
-        assertEquals(20, map.size());
+        assertEquals(20, map.getCapacity());
     }
 }

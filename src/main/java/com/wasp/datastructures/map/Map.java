@@ -20,42 +20,14 @@ public interface Map<K, V> extends Iterable<Map.Entry<K, V>> {
 
     Iterator<Entry<K, V>> iterator();
 
-    class Entry<K, V> {
-        private K key;
-        private V value;
+    interface Entry<K, V> {
 
-        public K getKey() {
-            return key;
-        }
+        K getKey();
 
-        public V getValue() {
-            return value;
-        }
+        V getValue();
 
-        public void setValue(V value) {
-            this.value = value;
-        }
+        void setValue(V value);
 
-        public Entry(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return "Entry{" +
-                "key=" + key +
-                ", value=" + value +
-                '}';
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Entry)) return false;
-            Entry<?, ?> entry = (Entry<?, ?>) o;
-            return Objects.equals(getKey(), entry.getKey()) && Objects.equals(getValue(), entry.getValue());
-        }
     }
 
 }

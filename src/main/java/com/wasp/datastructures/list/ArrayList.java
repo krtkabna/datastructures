@@ -3,12 +3,14 @@ package com.wasp.datastructures.list;
 import com.wasp.datastructures.exception.DataStructureIteratorException;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.StringJoiner;
 
 public class ArrayList<E> extends AbstractList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 16;
-    private static final double GROW_FACTOR = 1.5;
+    private static final float DEFAULT_GROW_FACTOR = 1.5f;
+    private float growFactor;
     private E[] array;
 
     public ArrayList() {
@@ -16,6 +18,11 @@ public class ArrayList<E> extends AbstractList<E> implements List<E> {
     }
 
     public ArrayList(int initialCapacity) {
+        this(initialCapacity, DEFAULT_GROW_FACTOR);
+    }
+
+    public ArrayList(int initialCapacity, float growFactor) {
+        this.growFactor = growFactor;
         array = (E[]) new Object[initialCapacity];
         size = 0;
     }
@@ -102,9 +109,11 @@ public class ArrayList<E> extends AbstractList<E> implements List<E> {
 
     private void ensureCapacity() {
         if (size() + 1 >= array.length) {
-            int capacity = (int) (array.length * GROW_FACTOR);
-            E[] temp = Arrays.copyOf(array, capacity);
-            array = temp;
+            int capacity = (int) (array.length * growFactor);
+            if (size == 1) {
+                capacity++;//round up
+            }
+            array = Arrays.copyOf(array, capacity);
         }
     }
 
@@ -119,6 +128,9 @@ public class ArrayList<E> extends AbstractList<E> implements List<E> {
 
             @Override
             public E next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
                 checkEmptyList();
                 return get(index++);
             }
